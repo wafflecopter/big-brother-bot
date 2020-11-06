@@ -231,7 +231,7 @@ class FtpytailPlugin(b3.plugin.Plugin):
                         break
                     else:
                         self._nbConsecutiveConnFailure = 0
-                        remotesize = ftp.size(os.path.basename(self.url_path))
+                        remotesize = self.ftpsize(ftp, os.path.basename(self.url_path))
                         self.verbose("connection successful: remote file size is %s" % remotesize)
                         if self._remoteFileOffset is None:
                             self._remoteFileOffset = remotesize
@@ -242,7 +242,7 @@ class FtpytailPlugin(b3.plugin.Plugin):
                                    force_windows_cache_reload, 1,
                                    rest=self._remoteFileOffset)
                     
-                remotesize = ftp.size(os.path.basename(self.url_path))
+                remotesize = self.ftpsize(ftp, os.path.basename(self.url_path))
                 if remotesize < self._remoteFileOffset:
                     self.debug("remote file rotation detected")
                     self._remoteFileOffset = 0
@@ -314,6 +314,16 @@ class FtpytailPlugin(b3.plugin.Plugin):
         except Exception:
             pass
     
+    def ftpsize(self, ftp, path):
+        r = []
+        def dircb(arg):
+            if path in arg:
+                r.append(arg)
+        ftp.dir(dircb)
+        x = int(r[0].split()[2])
+        print x
+        return x
+  
     def ftpconnect(self):
         self.verbose('connecting to %s:%s ...' % (self.ftpconfig["host"], self.ftpconfig["port"]))
         ftp = FTP()

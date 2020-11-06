@@ -1,0 +1,17 @@
+<configuration plugin="ftpytail">
+<settings name="settings">
+    <!-- timeout to allow when connecting to FTP server -->
+    <set name="use_windows_cache_fix">True</set>
+    <set name="timeout">5</set>
+    <!-- how much bytes to read at most from game log file's tail (this is to avoid downloading megabytes) -->
+    <set name="maxGapBytes">65536</set>
+    <!-- The 3 settings below defines how aggressive will be B3 at 
+    trying to reconnect after loosing the FTP connection.
+    Before 'max_consecutive_failures' connections error, the bot will wait
+    'short_delay' seconds before retrying. Then it will wait 'long_delay'. -->
+    <set name="max_consecutive_failures">10</set>
+    <set name="short_delay">2</set>
+    <set name="long_delay">10</set>
+</settings>
+</configuration>
+
