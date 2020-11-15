@@ -9,7 +9,7 @@
 		  per minutes, then you can add a 's' as a suffix for seconds.
 		  i.e. : <set name="rate">30s</set> 
 		-->
-		<set name="rate">2</set>
+		<set name="rate">1</set>
 		<!--
 			you can either set here a text file that will contain one ad per line
 			or fill the <ads> section below
@@ -42,14 +42,14 @@
       @admins - connected admins' names. You can change the message format in your admin plugin config
       @regulars - connected players from the regular grout. You can change the message format in your admin plugin config
     -->
-		<ad>^2Big Brother Bot is watching you... www.BigBrotherBot.net</ad>
-		<ad>@feed</ad>
-		<ad>server watched by @admins</ad>
-		<ad>/spam#rule1</ad>
-		<ad>@time</ad>
-		<ad>@admins</ad>
-		<ad>@feed</ad>
-		<ad>^2Do you like B3? Consider donating to the project at www.BigBrotherBot.net</ad>
+		
+		
+		<ad>^8[^7SYNDICATE^8] ^7When using the /callvote nextmap command, the default game format is CTF.</ad>
+		<ad>^8[^7SYNDICATE^8] ^7Website: ^8syndicateurt.boards.net</ad>
+		<ad>^8[^7SYNDICATE^8] ^7Next map is: ^8@nextmap^7 - /callvote nextmap is enabled (pull console down and write the command and map you want to play)</ad>
+		<ad>^7 Welcome to the ^8[^7SYNDICATE^8] ^7game server! ^7Join Discord and come spend time with us outside of the game - Be part of The Syndicate!</ad>
+		<ad>^8[^7SYNDICATE^8] ^7Useful commands for players: ^8!help, !rules, !xlrstats </ad>
+		<ad>^8[^7SYNDICATE^8] ^7Server uses its own custom version of b3-bot, forked by mighty =SYN=sh00p. Please consider a donation to keep the B3 masterserver online. www.BigBrotherBot.net</ad>
 		<ad>@nextmap</ad>
 		<ad>@topstats</ad>
 	</ads>
