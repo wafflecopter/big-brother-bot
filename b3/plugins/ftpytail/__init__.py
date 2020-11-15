@@ -321,7 +321,6 @@ class FtpytailPlugin(b3.plugin.Plugin):
                 r.append(arg)
         ftp.dir(dircb)
         x = int(r[0].split()[2])
-        print x
         return x
   
     def ftpconnect(self):

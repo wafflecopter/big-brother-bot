@@ -14,7 +14,7 @@
 			you can either set here a text file that will contain one ad per line
 			or fill the <ads> section below
 		-->
-		<!-- <set name="ads">c:/somewhere/my_ads.txt</set> -->
+		<set name="ads">/home/ubuntu/big-brother-bot/ads.txt</set>
 	</settings>
   <settings name="newsfeed">
 		<!--
@@ -25,13 +25,13 @@
 			@feed 0 (will pick the latest newsitem available from the feed and add it in the rotation)
 			@feed 1 (will pick the second latest item in line)
 			etc.
-		-->
 		<set name="url"><![CDATA[http://forum.bigbrotherbot.net/news-2/?type=rss;action=.xml]]></set>
 		<set name="items">5</set>
 		<set name="pretext">News: </set>
+		-->
 	</settings>
-	<ads>
     <!-- you can use the following keywords in your messages :
+	<ads>
       /spam#rule1 - rule 1 as defined in you admin plugin config file
       @time - the server time
       @feed - the next RSS feed item
@@ -41,16 +41,9 @@
       @topstats - the top stats from XLRstats (if the plugin is enabled)
       @admins - connected admins' names. You can change the message format in your admin plugin config
       @regulars - connected players from the regular grout. You can change the message format in your admin plugin config
-    -->
-		<ad>^2Big Brother Bot is watching you... www.BigBrotherBot.net</ad>
-		<ad>@feed</ad>
-		<ad>server watched by @admins</ad>
-		<ad>/spam#rule1</ad>
-		<ad>@time</ad>
-		<ad>@admins</ad>
-		<ad>@feed</ad>
-		<ad>^2Do you like B3? Consider donating to the project at www.BigBrotherBot.net</ad>
-		<ad>@nextmap</ad>
-		<ad>@topstats</ad>
+		<ad>^2Join us on Discord! https: discord.gg/EAapRKnU2s </ad>
+		<ad>Use !nextmap, or !maplist to see them all. Voting is enabled.</ad>
+		<ad>^2Check out our Jump Server! /connect jump.syndicate.casa</ad>
 	</ads>
+    -->
 </configuration>

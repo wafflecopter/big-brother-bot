@@ -740,18 +740,40 @@ class Poweradminurt41Plugin(b3.plugin.Plugin):
         redscore = self._getTeamScore(red, scores)
         return bluescore - redscore
 
+    def _fixClientTeam(self, clients):
+        redlets = self.console.getCvar('g_redteamlist').getString()
+        bluelets = self.console.getCvar('g_blueteamlist').getString()
+        rednums = bluenums = []
+        if redlets != '':
+            redlets = list(redlets)
+            for r in redlets:
+                rednums.append(ord(r.lower()) - 97)
+            for c in clients:
+                if int(c.cid) in rednums:
+                    self.debug('%s is red' % c.name)
+                    c.team = b3.TEAM_RED
+        if bluelets != '':
+            bluelets = list(bluelets)
+            for b in bluelets:
+                bluenums.append(ord(b.lower()) - 97)
+            for c in clients:
+                if int(c.cid) in bluenums:
+                    self.debug('%s is blue' % c.name)
+                    c.team = b3.TEAM_BLUE
+        return clients
+
     def _getTeamScoreDiffForAdvise(self, minplayers=None):
-        clients = self.console.clients.getList()
+        clients = self._fixClientTeam(self.console.clients.getList())
         gametype = self._getGameType()
         tdm = (gametype == 'tdm')
-        scores = self._getScores(clients, usexlrstats=tdm)
+        scores = self._getScores(clients, usexlrstats=True)
         blue = [c for c in clients if c.team == b3.TEAM_BLUE]
         red = [c for c in clients if c.team == b3.TEAM_RED]
         self.debug("advise: numblue=%d numred=%d" % (len(blue), len(red)))
 
-        if minplayers and len(blue) + len(red) < minplayers:
-            self.debug('advise: too few players')
-            return None, None
+        #if minplayers and len(blue) + len(red) < minplayers:
+        #    self.debug('advise: too few players')
+        #    return None, None
 
         diff = self._getTeamScoreDiff(blue, red, scores)
 
@@ -821,7 +843,7 @@ class Poweradminurt41Plugin(b3.plugin.Plugin):
 
     def _forgetTeamContrib(self):
         self._oldadv = (None, None, None)
-        clients = self.console.clients.getList()
+        clients = self._fixClientTeam(self.console.clients.getList())
         for c in clients:
             c.setvar(self, 'teamcontribhist', [])
             self._saveTeamvars(c)
@@ -858,7 +880,7 @@ class Poweradminurt41Plugin(b3.plugin.Plugin):
         if scores:
             bestscore = max(scores[c.id] for c in blue + red)
 
-        clients = self.console.clients.getList()
+        clients = self._fixClientTeam(self.console.clients.getList())
         numblue = len([c for c in clients if c.team == b3.TEAM_BLUE])
         numred = len([c for c in clients if c.team == b3.TEAM_RED])
         self.debug('move: num players: blue=%d red=%d' % (numblue, numred))
@@ -957,7 +979,7 @@ class Poweradminurt41Plugin(b3.plugin.Plugin):
         """
         Randomize teams a few times and pick the most balanced
         """
-        clients = self.console.clients.getList()
+        clients = self._fixClientTeam(self.console.clients.getList())
         scores = self._getScores(clients)
         oldblue = [c for c in clients if c.team == b3.TEAM_BLUE]
         oldred = [c for c in clients if c.team == b3.TEAM_RED]
@@ -1176,7 +1198,7 @@ class Poweradminurt41Plugin(b3.plugin.Plugin):
         Create unbalanced teams. Used to test !paskuffle and !pabalance.
         """
         self._balancing = True
-        clients = self.console.clients.getList()
+        clients = self._fixClientTeam(self.console.clients.getList())
         scores = self._getScores(clients)
         decorated = [(scores.get(c.id, 0), c) for c in clients if c.team in (b3.TEAM_BLUE, b3.TEAM_RED)]
         decorated.sort()
@@ -2174,7 +2196,7 @@ class Poweradminurt41Plugin(b3.plugin.Plugin):
                     stime = self.console.upTime()
                     self.verbose('uptime bot: %s' % stime)
                     forceclient = None
-                    clients = self.console.clients.getList()
+                    clients = self._fixClientTeam(self.console.clients.getList())
                     for c in clients:
                         if not c.isvar(self, 'teamtime'):
                             self.debug('client has no variable teamtime')
@@ -2223,7 +2245,7 @@ class Poweradminurt41Plugin(b3.plugin.Plugin):
 
     def resetTeamLocks(self):
         if self.isEnabled():
-            clients = self.console.clients.getList()
+            clients = self._fixClientTeam(self.console.clients.getList())
             for c in clients:
                 if c.isvar(self, 'paforced'):
                     c.delvar(self, 'paforced')
@@ -2240,7 +2262,7 @@ class Poweradminurt41Plugin(b3.plugin.Plugin):
         self.debug('checking names')
         d = {}
         if self.isEnabled() and self.console.time() > self._ignoreTill:
-            for player in self.console.clients.getList():
+            for player in self._fixClientTeam(self.console.clients.getList()):
                 if not player.name in d.keys():
                     d[player.name] = [player.cid]
                 else:
@@ -2305,7 +2327,7 @@ class Poweradminurt41Plugin(b3.plugin.Plugin):
 
     def resetNameChanges(self):
         if self.isEnabled() and self._checkchanges:
-            clients = self.console.clients.getList()
+            clients = self._fixClientTeam(self.console.clients.getList())
             for c in clients:
                 if c.isvar(self, 'namechanges'):
                     c.setvar(self, 'namechanges', 0)
@@ -2326,7 +2348,7 @@ class Poweradminurt41Plugin(b3.plugin.Plugin):
     def speccheck(self):
         if self.isEnabled() and self._g_maxGameClients == 0 and not self._matchmode:
             self.debug('checking for idle spectators')
-            clients = self.console.clients.getList()
+            clients = self._fixClientTeam(self.console.clients.getList())
             if len(clients) < self._smaxplayers:
                 self.verbose('clients online (%s) < maxplayers (%s), ignoring' % (len(clients), self._smaxplayers))
                 return
@@ -2402,7 +2424,7 @@ class Poweradminurt41Plugin(b3.plugin.Plugin):
 
     def resetVars(self):
         if self.isEnabled() and self._hsenable:
-            clients = self.console.clients.getList()
+            clients = self._fixClientTeam(self.console.clients.getList())
             for c in clients:
                 if c.isvar(self, 'hitvars'):
                     c.setvar(self, 'totalhits', 0.00)
